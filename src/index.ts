@@ -103,6 +103,7 @@ export default class ImageTool implements BlockTool {
       additionalRequestHeaders: config.additionalRequestHeaders,
       field: config.field,
       types: config.types,
+      altPlaceholder: this.api.i18n.t(config.altPlaceholder ?? 'Alt'),
       captionPlaceholder: this.api.i18n.t(config.captionPlaceholder ?? 'Caption'),
       buttonContent: config.buttonContent,
       uploader: config.uploader,
@@ -139,6 +140,7 @@ export default class ImageTool implements BlockTool {
      * Set saved state
      */
     this._data = {
+      alt: '',
       caption: '',
       withBorder: false,
       withBackground: false,
@@ -221,8 +223,10 @@ export default class ImageTool implements BlockTool {
    */
   public save(): ImageToolData {
     const caption = this.ui.nodes.caption;
+    const alt = this.ui.nodes.alt;
 
     this._data.caption = caption.innerHTML;
+    this._data.alt = alt.innerHTML;
 
     return this.data;
   }
@@ -395,6 +399,9 @@ export default class ImageTool implements BlockTool {
 
     this._data.caption = data.caption || '';
     this.ui.fillCaption(this._data.caption);
+
+    this._data.alt = data.alt || '';
+    this.ui.fillAlt(this._data.alt);
 
     ImageTool.tunes.forEach(({ name: tune }) => {
       const value = typeof data[tune as keyof ImageToolData] !== 'undefined' ? data[tune as keyof ImageToolData] === true || data[tune as keyof ImageToolData] === 'true' : false;

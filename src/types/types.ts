@@ -69,6 +69,11 @@ export interface UploadResponseFormat<AdditionalFileData = {}> {
  */
 export type ImageToolData<Actions = {}, AdditionalFileData = {}> = {
   /**
+   * Alt text for the image.
+   */
+  alt: string;
+
+  /**
    * Caption for the image.
    */
   caption: string;
@@ -153,6 +158,11 @@ export interface ImageConfig {
    * Allowed mime-types for the uploaded image.
    */
   types?: string;
+
+  /**
+   * Placeholder text for the alt attribute of the image.
+   */
+  altPlaceholder?: string;
 
   /**
    * Placeholder text for the caption field.

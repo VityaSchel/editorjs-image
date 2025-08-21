@@ -44,6 +44,31 @@
     }
   }
 
+  &__alt {
+    &[contentEditable="true"][data-placeholder]::before {
+      position: absolute;
+      content: attr(data-placeholder);
+      color: #707684;
+      font-weight: normal;
+      display: none;
+    }
+
+    &[contentEditable="true"][data-placeholder]:empty {
+      &::before {
+        display: block;
+      }
+
+      &::after {
+        display: none;
+      }
+
+      &:focus::before {
+        display: none;
+      }
+    }
+    margin-bottom: 10px;
+  }
+
   &__caption {
     visibility: hidden;
     position: absolute;
@@ -68,6 +93,9 @@
         display: none;
       }
     }
+
+
+    margin-bottom: 10px;
   }
 
   &--empty {
@@ -84,6 +112,9 @@
   &--uploading {
     ^&__caption {
       visibility: hidden !important;
+    }
+    ^&__alt {
+      display: none;
     }
   }
 

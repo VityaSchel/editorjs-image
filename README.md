@@ -79,6 +79,7 @@ Image Tool supports these configuration parameters:
 | types | `string` | (default: `image/*`) Mime-types of files that can be [accepted with file selection](https://github.com/codex-team/ajax#accept-string).|
 | additionalRequestData | `object` | Object with any data you want to send with uploading requests |
 | additionalRequestHeaders | `object` | Object with any custom headers which will be added to request. [See example](https://github.com/codex-team/ajax/blob/e5bc2a2391a18574c88b7ecd6508c29974c3e27f/README.md#headers-object) |
+| altPlaceholder | `string` | (default: `Alt`) Placeholder for alt tag |
 | captionPlaceholder | `string` | (default: `Caption`) Placeholder for Caption input |
 | buttonContent | `string` | Allows to override HTML content of «Select file» button |
 | uploader | `{{uploadByFile: function, uploadByUrl: function}}` | Optional custom uploading methods. See details below. |
@@ -134,6 +135,7 @@ This Tool returns `data` with following format
 | Field          | Type      | Description                     |
 | -------------- | --------- | ------------------------------- |
 | file           | `object`  | Uploaded file data. Any data got from backend uploader. Always contain the `url` property |
+| alt            | `string`  | image's alt tag                 |
 | caption        | `string`  | image's caption                 |
 | withBorder     | `boolean` | add border to image             |
 | withBackground | `boolean` | need to add background          |
@@ -147,6 +149,7 @@ This Tool returns `data` with following format
         "file": {
             "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
         },
+        "alt": "Tesla roadster",
         "caption" : "Roadster // tesla.com",
         "withBorder" : false,
         "withBackground" : false,

@@ -53,6 +53,11 @@ interface Nodes {
   imagePreloader: HTMLElement;
 
   /**
+   * Alt element for the image.
+   */
+  alt: HTMLElement;
+
+  /**
    * Caption element for the image.
    */
   caption: HTMLElement;
@@ -130,6 +135,9 @@ export default class Ui {
       fileButton: this.createFileButton(),
       imageEl: undefined,
       imagePreloader: make('div', this.CSS.imagePreloader),
+      alt: make('div', [this.CSS.input, this.CSS.alt], {
+        contentEditable: !this.readOnly,
+      }),
       caption: make('div', [this.CSS.input, this.CSS.caption], {
         contentEditable: !this.readOnly,
       }),
@@ -141,13 +149,16 @@ export default class Ui {
      *    <image-container>
      *      <image-preloader />
      *    </image-container>
+     *    <alt />
      *    <caption />
      *    <select-file-button />
      *  </wrapper>
      */
+    this.nodes.alt.dataset.placeholder = this.config.altPlaceholder;
     this.nodes.caption.dataset.placeholder = this.config.captionPlaceholder;
     this.nodes.imageContainer.appendChild(this.nodes.imagePreloader);
     this.nodes.wrapper.appendChild(this.nodes.imageContainer);
+    this.nodes.wrapper.appendChild(this.nodes.alt);
     this.nodes.wrapper.appendChild(this.nodes.caption);
     this.nodes.wrapper.appendChild(this.nodes.fileButton);
   }
@@ -250,6 +261,16 @@ export default class Ui {
   }
 
   /**
+   * Shows alt input
+   * @param text - caption content text
+   */
+  public fillAlt(text: string): void {
+    if (this.nodes.alt !== undefined) {
+      this.nodes.alt.innerHTML = text;
+    }
+  }
+
+  /**
    * Shows caption input
    * @param text - caption content text
    */
@@ -290,6 +311,7 @@ export default class Ui {
       imageContainer: 'image-tool__image',
       imagePreloader: 'image-tool__image-preloader',
       imageEl: 'image-tool__image-picture',
+      alt: 'image-tool__alt',
       caption: 'image-tool__caption',
     };
   };
