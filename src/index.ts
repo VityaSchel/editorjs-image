@@ -35,7 +35,7 @@ import './index.css';
 import Ui from './ui';
 import Uploader from './uploader';
 
-import { IconPicture, IconText } from '@codexteam/icons';
+import { IconPlay, IconText } from '@codexteam/icons';
 import type { ActionConfig, UploadResponseFormat, VideoToolData, VideoConfig, HTMLPasteEventDetailExtended, VideoSetterParam, FeaturesConfig } from './types/types';
 
 type VideoToolConstructorOptions = BlockToolConstructorOptions<VideoToolData, VideoConfig>;
@@ -161,7 +161,7 @@ export default class VideoTool implements BlockTool {
    */
   public static get toolbox(): ToolboxConfig {
     return {
-      icon: IconPicture,
+      icon: IconPlay,
       title: 'Video',
     };
   }
@@ -303,7 +303,7 @@ export default class VideoTool implements BlockTool {
        * Paste URL of video into the Editor
        */
       patterns: {
-        video: /https?:\/\/\S+\.(gif|jpe?g|tiff|png|svg|webp)(\?[a-z0-9=]*)?$/i,
+        video: /https?:\/\/\S+\.(webm|mp4)(\?[a-z0-9=]*)?$/i,
       },
 
       /**

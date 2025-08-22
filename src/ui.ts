@@ -13,12 +13,12 @@ export enum UiState {
   Empty = 'empty',
 
   /**
-   * The UI is in an uploading state, indicating an video is currently being uploaded.
+   * The UI is in an uploading state, indicating a video is currently being uploaded.
    */
   Uploading = 'uploading',
 
   /**
-   * The UI is in a filled state, with an video successfully loaded.
+   * The UI is in a filled state, with a video successfully loaded.
    */
   Filled = 'filled'
 };
@@ -185,7 +185,7 @@ export default class Ui {
   }
 
   /**
-   * Shows an video
+   * Shows a video
    * @param url - video source
    */
   public fillVideo(url: string): void {
@@ -287,7 +287,7 @@ export default class Ui {
   private createFileButton(): HTMLElement {
     const button = make('div', [this.CSS.button]);
 
-    button.innerHTML = this.config.buttonContent ?? `${IconPicture} ${this.api.i18n.t('Select an Video')}`;
+    button.innerHTML = this.config.buttonContent ?? `${IconPicture} ${this.api.i18n.t('Select a Video')}`;
 
     button.addEventListener('click', () => {
       this.onSelectFile();
