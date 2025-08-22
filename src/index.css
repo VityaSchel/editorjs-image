@@ -1,9 +1,9 @@
-.image-tool {
+.video-tool {
   --bg-color: #cdd1e0;
   --front-color: #388ae5;
   --border-color: #e8e8eb;
 
-  &__image {
+  &__video {
     border-radius: 3px;
     overflow: hidden;
     margin-bottom: 10px;
@@ -38,7 +38,7 @@
         top: 50%;
         margin-top: -30px;
         margin-left: -30px;
-        animation: image-preloader-spin 2s infinite linear;
+        animation: video-preloader-spin 2s infinite linear;
         box-sizing: border-box;
       }
     }
@@ -71,7 +71,7 @@
   }
 
   &--empty {
-    ^&__image {
+    ^&__video {
       display: none;
 
       &-preloader {
@@ -103,7 +103,7 @@
       display: none;
     }
 
-    ^&__image {
+    ^&__video {
       &-preloader {
         display: none;
       }
@@ -111,7 +111,7 @@
   }
 
   &--uploading {
-    ^&__image {
+    ^&__video {
       min-height: 200px;
       display: flex;
       border: 1px solid var(--border-color);
@@ -132,32 +132,6 @@
    * ----------------
    */
 
-  &--withBorder {
-    ^&__image {
-      border: 1px solid var(--border-color);
-    }
-  }
-
-  &--withBackground {
-    ^&__image {
-      padding: 15px;
-      background: var(--bg-color);
-
-      &-picture {
-        max-width: 60%;
-        margin: 0 auto;
-      }
-    }
-  }
-
-  &--stretched {
-    ^&__image {
-      &-picture {
-        width: 100%;
-      }
-    }
-  }
-
   &--caption {
     ^&__caption {
       visibility: visible;
@@ -167,7 +141,7 @@
   }
 }
 
-@keyframes image-preloader-spin {
+@keyframes video-preloader-spin {
   0% {
     transform: rotate(0deg);
   }

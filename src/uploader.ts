@@ -2,7 +2,7 @@ import ajax from '@codexteam/ajax';
 import type { AjaxResponse } from '@codexteam/ajax';
 import isPromise from './utils/isPromise';
 import type { UploadOptions } from './types/types';
-import type { UploadResponseFormat, ImageConfig } from './types/types';
+import type { UploadResponseFormat, VideoConfig } from './types/types';
 
 /**
  * Params interface for Uploader constructor
@@ -11,7 +11,7 @@ interface UploaderParams {
   /**
    * Configuration for the uploader
    */
-  config: ImageConfig;
+  config: VideoConfig;
 
   /**
    * Handles the upload response.
@@ -35,12 +35,12 @@ interface UploaderParams {
  *  3. Upload by pasting file from Clipboard or by Drag'n'Drop
  */
 export default class Uploader {
-  private config: ImageConfig;
+  private config: VideoConfig;
   private onUpload: (response: UploadResponseFormat) => void;
   private onError: (error: string) => void;
   /**
    * @param params - uploader module params
-   * @param params.config - image tool config
+   * @param params.config - video tool config
    * @param params.onUpload - one callback for all uploading (file, url, d-n-d, pasting)
    * @param params.onError - callback for uploading errors
    */
@@ -75,7 +75,7 @@ export default class Uploader {
     if (this.config.uploader && typeof this.config.uploader.uploadByFile === 'function') {
       const uploadByFile = this.config.uploader.uploadByFile;
 
-      upload = ajax.selectFiles({ accept: this.config.types ?? 'image/*' }).then((files: File[]) => {
+      upload = ajax.selectFiles({ accept: this.config.types ?? 'video/*' }).then((files: File[]) => {
         preparePreview(files[0]);
 
         const customUpload = uploadByFile(files[0]);
@@ -92,12 +92,12 @@ export default class Uploader {
       upload = ajax.transport({
         url: this.config.endpoints.byFile,
         data: this.config.additionalRequestData,
-        accept: this.config.types ?? 'image/*',
+        accept: this.config.types ?? 'video/*',
         headers: this.config.additionalRequestHeaders as Record<string, string>,
         beforeSend: (files: File[]) => {
           preparePreview(files[0]);
         },
-        fieldName: this.config.field ?? 'image',
+        fieldName: this.config.field ?? 'video',
       }).then((response: AjaxResponse) => response.body as UploadResponseFormat);
     }
 
@@ -111,7 +111,7 @@ export default class Uploader {
   /**
    * Handle clicks on the upload file button
    * Fires ajax.post()
-   * @param url - image source url
+   * @param url - video source url
    */
   public uploadByUrl(url: string): void {
     let upload;
@@ -180,7 +180,7 @@ export default class Uploader {
        */
       const formData = new FormData();
 
-      formData.append(this.config.field ?? 'image', file);
+      formData.append(this.config.field ?? 'video', file);
 
       if (this.config.additionalRequestData && Object.keys(this.config.additionalRequestData).length) {
         Object.entries(this.config.additionalRequestData).forEach(([name, value]: [string, string | Blob]) => {

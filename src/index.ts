@@ -1,8 +1,8 @@
 /**
- * Image Tool for the Editor.js
- * @author CodeX <team@codex.so>
+ * Video Tool for the Editor.js
+ * @author Viktor Shchelochkov <hi@hloth.dev> (https://hloth.dev)
  * @license MIT
- * @see {@link https://github.com/editor-js/image}
+ * @see {@link https://github.com/VityaSchel/editorjs-image/tree/editorjs-video}
  *
  * To developers.
  * To simplify Tool structure, we split it to 4 parts:
@@ -17,8 +17,8 @@
  *
  * It will expose 8008 port, so you can pass http://localhost:8008 with the Tools config:
  *
- * image: {
- *   class: ImageTool,
+ * video: {
+ *   class: VideoTool,
  *   config: {
  *     endpoints: {
  *       byFile: 'http://localhost:8008/uploadFile',
@@ -35,15 +35,15 @@ import './index.css';
 import Ui from './ui';
 import Uploader from './uploader';
 
-import { IconAddBorder, IconStretch, IconAddBackground, IconPicture, IconText } from '@codexteam/icons';
-import type { ActionConfig, UploadResponseFormat, ImageToolData, ImageConfig, HTMLPasteEventDetailExtended, ImageSetterParam, FeaturesConfig } from './types/types';
+import { IconPicture, IconText } from '@codexteam/icons';
+import type { ActionConfig, UploadResponseFormat, VideoToolData, VideoConfig, HTMLPasteEventDetailExtended, VideoSetterParam, FeaturesConfig } from './types/types';
 
-type ImageToolConstructorOptions = BlockToolConstructorOptions<ImageToolData, ImageConfig>;
+type VideoToolConstructorOptions = BlockToolConstructorOptions<VideoToolData, VideoConfig>;
 
 /**
- * Implementation of ImageTool class
+ * Implementation of VideoTool class
  */
-export default class ImageTool implements BlockTool {
+export default class VideoTool implements BlockTool {
   /**
    * Editor.js API instance
    */
@@ -55,9 +55,9 @@ export default class ImageTool implements BlockTool {
   private block: BlockAPI;
 
   /**
-   * Configuration for the ImageTool
+   * Configuration for the VideoTool
    */
-  private config: ImageConfig;
+  private config: VideoConfig;
 
   /**
    * Uploader module instance
@@ -72,7 +72,7 @@ export default class ImageTool implements BlockTool {
   /**
    * Stores current block data internally
    */
-  private _data: ImageToolData;
+  private _data: VideoToolData;
 
   /**
    * Caption enabled state
@@ -90,7 +90,7 @@ export default class ImageTool implements BlockTool {
    * @param tool.readOnly - read-only mode flag
    * @param tool.block - current Block API
    */
-  constructor({ data, config, api, readOnly, block }: ImageToolConstructorOptions) {
+  constructor({ data, config, api, readOnly, block }: VideoToolConstructorOptions) {
     this.api = api;
     this.block = block;
 
@@ -127,8 +127,8 @@ export default class ImageTool implements BlockTool {
       config: this.config,
       onSelectFile: () => {
         this.uploader.uploadSelectedFile({
-          onPreview: (src: string) => {
-            this.ui.showPreloader(src);
+          onPreview: () => {
+            this.ui.showPreloader();
           },
         });
       },
@@ -140,9 +140,6 @@ export default class ImageTool implements BlockTool {
      */
     this._data = {
       caption: '',
-      withBorder: false,
-      withBackground: false,
-      stretched: false,
       file: {
         url: '',
       },
@@ -165,34 +162,15 @@ export default class ImageTool implements BlockTool {
   public static get toolbox(): ToolboxConfig {
     return {
       icon: IconPicture,
-      title: 'Image',
+      title: 'Video',
     };
   }
 
   /**
-   * Available image tools
+   * Available video tools
    */
   public static get tunes(): Array<ActionConfig> {
-    return [
-      {
-        name: 'withBorder',
-        icon: IconAddBorder,
-        title: 'With border',
-        toggle: true,
-      },
-      {
-        name: 'stretched',
-        icon: IconStretch,
-        title: 'Stretch image',
-        toggle: true,
-      },
-      {
-        name: 'withBackground',
-        icon: IconAddBackground,
-        title: 'With background',
-        toggle: true,
-      },
-    ];
+    return [];
   }
 
   /**
@@ -208,18 +186,18 @@ export default class ImageTool implements BlockTool {
   }
 
   /**
-   * Validate data: check if Image exists
+   * Validate data: check if Video exists
    * @param savedData — data received after saving
    * @returns false if saved data is not correct, otherwise true
    */
-  public validate(savedData: ImageToolData): boolean {
+  public validate(savedData: VideoToolData): boolean {
     return !!savedData.file.url;
   }
 
   /**
    * Return Block data
    */
-  public save(): ImageToolData {
+  public save(): VideoToolData {
     const caption = this.ui.nodes.caption;
 
     this._data.caption = caption.innerHTML;
@@ -228,17 +206,14 @@ export default class ImageTool implements BlockTool {
   }
 
   /**
-   * Returns configuration for block tunes: add background, add border, stretch image
+   * Returns configuration for block tunes
    * @returns TunesMenuConfig
    */
   public renderSettings(): TunesMenuConfig {
     // Merge default tunes with the ones that might be added by user
-    // @see https://github.com/editor-js/image/pull/49
-    const tunes = ImageTool.tunes.concat(this.config.actions || []);
+    // @see https://github.com/editor-js/video/pull/49
+    const tunes = VideoTool.tunes.concat(this.config.actions || []);
     const featureTuneMap: Record<string, string> = {
-      border: 'withBorder',
-      background: 'withBackground',
-      stretch: 'stretched',
       caption: 'caption',
     };
 
@@ -266,13 +241,11 @@ export default class ImageTool implements BlockTool {
      * @param tune - tune to check
      */
     const isActive = (tune: ActionConfig): boolean => {
-      let currentState = this.data[tune.name as keyof ImageToolData] as boolean;
-
       if (tune.name === 'caption') {
-        currentState = this.isCaptionEnabled ?? currentState;
+        return this.isCaptionEnabled ?? false;
+      } else {
+        return false;
       }
-
-      return currentState;
     };
 
     return availableTunes.map(tune => ({
@@ -299,13 +272,13 @@ export default class ImageTool implements BlockTool {
           newState = this.isCaptionEnabled;
         }
 
-        this.tuneToggled(tune.name as keyof ImageToolData, newState);
+        this.tuneToggled(tune.name as keyof VideoToolData, newState);
       },
     }));
   }
 
   /**
-   * Fires after clicks on the Toolbox Image Icon
+   * Fires after clicks on the Toolbox Video Icon
    * Initiates click on the Select File button
    */
   public appendCallback(): void {
@@ -327,17 +300,17 @@ export default class ImageTool implements BlockTool {
         },
       ],
       /**
-       * Paste URL of image into the Editor
+       * Paste URL of video into the Editor
        */
       patterns: {
-        image: /https?:\/\/\S+\.(gif|jpe?g|tiff|png|svg|webp)(\?[a-z0-9=]*)?$/i,
+        video: /https?:\/\/\S+\.(gif|jpe?g|tiff|png|svg|webp)(\?[a-z0-9=]*)?$/i,
       },
 
       /**
        * Drag n drop file from into the Editor
        */
       files: {
-        mimeTypes: ['image/*'],
+        mimeTypes: ['video/*'],
       },
     };
   }
@@ -351,11 +324,11 @@ export default class ImageTool implements BlockTool {
   public async onPaste(event: PasteEvent): Promise<void> {
     switch (event.type) {
       case 'tag': {
-        const image = (event.detail as HTMLPasteEventDetailExtended).data;
+        const video = (event.detail as HTMLPasteEventDetailExtended).data;
 
-        /** Images from PDF */
-        if (/^blob:/.test(image.src)) {
-          const response = await fetch(image.src);
+        /** Videos from PDF */
+        if (/^blob:/.test(video.src)) {
+          const response = await fetch(video.src);
 
           const file = await response.blob();
 
@@ -363,7 +336,7 @@ export default class ImageTool implements BlockTool {
           break;
         }
 
-        this.uploadUrl(image.src);
+        this.uploadUrl(video.src);
         break;
       }
       case 'pattern': {
@@ -388,43 +361,35 @@ export default class ImageTool implements BlockTool {
 
   /**
    * Stores all Tool's data
-   * @param data - data in Image Tool format
+   * @param data - data in Video Tool format
    */
-  private set data(data: ImageToolData) {
-    this.image = data.file;
+  private set data(data: VideoToolData) {
+    this.video = data.file;
 
     this._data.caption = data.caption || '';
     this.ui.fillCaption(this._data.caption);
 
-    ImageTool.tunes.forEach(({ name: tune }) => {
-      const value = typeof data[tune as keyof ImageToolData] !== 'undefined' ? data[tune as keyof ImageToolData] === true || data[tune as keyof ImageToolData] === 'true' : false;
-
-      this.setTune(tune as keyof ImageToolData, value);
-    });
-
-    if (data.caption) {
-      this.setTune('caption', true);
-    } else if (this.config.features?.caption === true) {
-      this.setTune('caption', true);
+    if (this.config.features?.caption === true) {
+      this.ui.applyTune('caption', Boolean(data.caption || ''));
     }
   }
 
   /**
    * Return Tool data
    */
-  private get data(): ImageToolData {
+  private get data(): VideoToolData {
     return this._data;
   }
 
   /**
-   * Set new image file
+   * Set new video file
    * @param file - uploaded file data
    */
-  private set image(file: ImageSetterParam | undefined) {
+  private set video(file: VideoSetterParam | undefined) {
     this._data.file = file || { url: '' };
 
     if (file && file.url) {
-      this.ui.fillImage(file.url);
+      this.ui.fillVideo(file.url);
     }
   }
 
@@ -434,7 +399,7 @@ export default class ImageTool implements BlockTool {
    */
   private onUpload(response: UploadResponseFormat): void {
     if (response.success && Boolean(response.file)) {
-      this.image = response.file;
+      this.video = response.file;
     } else {
       this.uploadingFailed('incorrect response: ' + JSON.stringify(response));
     }
@@ -445,10 +410,10 @@ export default class ImageTool implements BlockTool {
    * @param errorText - uploading error info
    */
   private uploadingFailed(errorText: string): void {
-    console.log('Image Tool: uploading failed because of', errorText);
+    console.log('Video Tool: uploading failed because of', errorText);
 
     this.api.notifier.show({
-      message: this.api.i18n.t('Couldn’t upload image. Please try another.'),
+      message: this.api.i18n.t('Couldn’t upload video'),
       style: 'error',
     });
     this.ui.hidePreloader();
@@ -459,7 +424,7 @@ export default class ImageTool implements BlockTool {
    * @param tuneName - tune that has been clicked
    * @param state - new state
    */
-  private tuneToggled(tuneName: keyof ImageToolData, state: boolean): void {
+  private tuneToggled(tuneName: keyof VideoToolData, state: boolean): void {
     if (tuneName === 'caption') {
       this.ui.applyTune(tuneName, state);
 
@@ -468,53 +433,28 @@ export default class ImageTool implements BlockTool {
         this.ui.fillCaption('');
       }
     } else {
-      /**
-       * Inverse tune state
-       */
-      this.setTune(tuneName, state);
+      throw new Error(`There is no tune with name ${tuneName} in Video Tool`);
     }
   }
 
   /**
-   * Set one tune
-   * @param tuneName - {@link Tunes.tunes}
-   * @param value - tune state
-   */
-  private setTune(tuneName: keyof ImageToolData, value: boolean): void {
-    (this._data[tuneName] as boolean) = value;
-
-    this.ui.applyTune(tuneName, value);
-    if (tuneName === 'stretched') {
-      /**
-       * Wait until the API is ready
-       */
-      Promise.resolve().then(() => {
-        this.block.stretched = value;
-      })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  }
-
-  /**
-   * Show preloader and upload image file
+   * Show preloader and upload video file
    * @param file - file that is currently uploading (from paste)
    */
   private uploadFile(file: Blob): void {
     this.uploader.uploadByFile(file, {
-      onPreview: (src: string) => {
-        this.ui.showPreloader(src);
+      onPreview: () => {
+        this.ui.showPreloader();
       },
     });
   }
 
   /**
-   * Show preloader and upload image by target url
+   * Show preloader and upload video by target url
    * @param url - url pasted
    */
   private uploadUrl(url: string): void {
-    this.ui.showPreloader(url);
+    this.ui.showPreloader();
     this.uploader.uploadByUrl(url);
   }
 }

@@ -1,25 +1,25 @@
 {
-  "name": "@editorjs/image",
+  "name": "@hloth/editorjs-video",
   "version": "2.10.3",
   "keywords": [
     "codex editor",
-    "image",
+    "video",
     "editor.js",
     "editorjs"
   ],
-  "description": "Image Tool for Editor.js",
+  "description": "Video Tool for Editor.js",
   "license": "MIT",
-  "repository": "https://github.com/editor-js/image",
+  "repository": "https://github.com/VityaSchel/editorjs-image/tree/editorjs-video",
   "files": [
     "dist"
   ],
-  "main": "./dist/image.umd.js",
-  "module": "./dist/image.mjs",
+  "main": "./dist/video.umd.js",
+  "module": "./dist/video.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/image.mjs",
-      "require": "./dist/image.umd.js",
+      "import": "./dist/video.mjs",
+      "require": "./dist/video.umd.js",
       "types": "./dist/index.d.ts"
     }
   },
@@ -30,10 +30,7 @@
     "lint:errors": "eslint --quiet",
     "lint:fix": "eslint --fix"
   },
-  "author": {
-    "name": "CodeX",
-    "email": "team@ifmo.su"
-  },
+  "author": "Viktor Shchelochkov <hi@hloth.dev> (https://hloth.dev)",
   "devDependencies": {
     "@codexteam/ajax": "^4.2.0",
     "@editorjs/editorjs": "2.30.0-rc.12",

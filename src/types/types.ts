@@ -13,7 +13,7 @@ export interface UploadOptions {
 }
 
 /**
- * User configuration of Image block tunes. Allows to add custom tunes through the config
+ * User configuration of Video block tunes. Allows to add custom tunes through the config
  */
 export interface ActionConfig {
   /**
@@ -58,43 +58,28 @@ export interface UploadResponseFormat<AdditionalFileData = {}> {
    */
   file: {
     /**
-     * The URL of the uploaded image.
+     * The URL of the uploaded video.
      */
     url: string;
   } & AdditionalFileData;
 }
 
 /**
- * ImageToolData type representing the input and output data format for the image tool, including optional custome actions.
+ * VideoToolData type representing the input and output data format for the video tool, including optional custome actions.
  */
-export type ImageToolData<Actions = {}, AdditionalFileData = {}> = {
+export type VideoToolData<Actions = {}, AdditionalFileData = {}> = {
   /**
-   * Caption for the image.
+   * Caption for the video.
    */
   caption: string;
 
   /**
-   * Flag indicating whether the image has a border.
-   */
-  withBorder: boolean;
-
-  /**
-   * Flag indicating whether the image has a background.
-   */
-  withBackground: boolean;
-
-  /**
-   * Flag indicating whether the image is stretched.
-   */
-  stretched: boolean;
-
-  /**
-   * Object containing the URL of the image file.
+   * Object containing the URL of the video file.
    * Also can contain any additional data.
    */
   file: {
     /**
-     * The URL of the image.
+     * The URL of the video.
      */
     url: string;
   } & AdditionalFileData;
@@ -105,29 +90,17 @@ export type ImageToolData<Actions = {}, AdditionalFileData = {}> = {
  */
 export type FeaturesConfig = {
   /**
-   * Flag to enable/disable tune - background.
-   */
-  background?: boolean;
-  /**
-   * Flag to enable/disable tune - border.
-   */
-  border?: boolean;
-  /**
    * Flag to enable/disable caption.
    * Can be set to 'optional' to allow users to toggle via block tunes.
    */
   caption?: boolean | 'optional';
-  /**
-   * Flag to enable/disable tune - stretched
-   */
-  stretch?: boolean;
 };
 
 /**
  *
  * @description Config supported by Tool
  */
-export interface ImageConfig {
+export interface VideoConfig {
   /**
    * Endpoints for upload, whether using file or URL.
    */
@@ -145,12 +118,12 @@ export interface ImageConfig {
   };
 
   /**
-   * Field name for the uploaded image.
+   * Field name for the uploaded video.
    */
   field?: string;
 
   /**
-   * Allowed mime-types for the uploaded image.
+   * Allowed mime-types for the uploaded video.
    */
   types?: string;
 
@@ -180,12 +153,12 @@ export interface ImageConfig {
   uploader?: {
 
     /**
-     * Method to upload an image by file.
+     * Method to upload a video by file.
      */
     uploadByFile?: (file: Blob) => Promise<UploadResponseFormat>;
 
     /**
-     * Method to upload an image by URL.
+     * Method to upload a video by URL.
      */
     uploadByUrl?: (url: string) => Promise<UploadResponseFormat>;
   };
@@ -207,22 +180,22 @@ export interface ImageConfig {
  */
 export interface HTMLPasteEventDetailExtended extends HTMLPasteEventDetail {
   /**
-   * The data property containing the source of the image and HTML element details.
+   * The data property containing the source of the video and HTML element details.
    */
   data: {
     /**
-     * The source URL of the pasted image.
+     * The source URL of the pasted video.
      */
     src: string;
   } & HTMLElement;
 }
 
 /**
- * Parameter type of Image setter function in ImageTool
+ * Parameter type of Video setter function in VideoTool
  */
-export type ImageSetterParam = {
+export type VideoSetterParam = {
   /**
-   * url path of the image
+   * url path of the video
    */
   url: string;
 };
