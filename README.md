@@ -115,6 +115,7 @@ This Tool returns `data` with following format
 | -------------- | --------- | ------------------------------- |
 | file           | `object`  | Uploaded file data. Any data got from backend uploader. Always contain the `url` property |
 | caption        | `string`  | video's caption                 |
+| aspectRatio    | `number`  | video's width / height          |
 
 
 ```json
@@ -124,7 +125,8 @@ This Tool returns `data` with following format
         "file": {
             "url" : "https://media.tenor.com/gHEwozl_KpwAAAPo/duck-pride.mp4"
         },
-        "caption" : "Pride 🏳️‍🌈"
+        "caption" : "Pride 🏳️‍🌈",
+        "aspectRatio": 1.2121212121212122
     }
 }
 ```

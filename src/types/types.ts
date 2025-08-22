@@ -74,6 +74,11 @@ export type VideoToolData<Actions = {}, AdditionalFileData = {}> = {
   caption: string;
 
   /**
+   * Aspect ratio of the video.
+   */
+  aspectRatio: number;
+
+  /**
    * Object containing the URL of the video file.
    * Also can contain any additional data.
    */

@@ -140,6 +140,7 @@ export default class VideoTool implements BlockTool {
      */
     this._data = {
       caption: '',
+      aspectRatio: 1,
       file: {
         url: '',
       },
@@ -201,6 +202,8 @@ export default class VideoTool implements BlockTool {
     const caption = this.ui.nodes.caption;
 
     this._data.caption = caption.innerHTML;
+
+    this.data.aspectRatio = (this.ui.nodes.videoEl?.videoWidth ?? 1) / (this.ui.nodes.videoEl?.videoHeight ?? 1);
 
     return this.data;
   }
@@ -368,6 +371,8 @@ export default class VideoTool implements BlockTool {
 
     this._data.caption = data.caption || '';
     this.ui.fillCaption(this._data.caption);
+
+    this.data.aspectRatio = data.aspectRatio || 1;
 
     if (this.config.features?.caption === true) {
       this.ui.applyTune('caption', Boolean(data.caption || ''));

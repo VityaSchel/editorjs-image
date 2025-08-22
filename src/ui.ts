@@ -45,7 +45,7 @@ interface Nodes {
   /**
    * Represents the video element in the UI, if one is present; otherwise, it's undefined.
    */
-  videoEl?: HTMLElement;
+  videoEl?: HTMLVideoElement;
 
   /**
    * Preloader element for the video.
@@ -189,47 +189,21 @@ export default class Ui {
    * @param url - video source
    */
   public fillVideo(url: string): void {
-    /**
-     * Check for a source extension to compose element correctly: video tag for mp4, img — for others
-     */
-    const tag = /\.mp4$/.test(url) ? 'VIDEO' : 'IMG';
-
     const attributes: { [key: string]: string | boolean } = {
       src: url,
+      playsinline: true,
+      controls: true,
     };
-
-    /**
-     * We use eventName variable because IMG and VIDEO tags have different event to be called on source load
-     * - IMG: load
-     * - VIDEO: loadeddata
-     */
-    let eventName = 'load';
-
-    /**
-     * Update attributes and eventName if source is a mp4 video
-     */
-    if (tag === 'VIDEO') {
-      /**
-       * Add attributes for playing muted mp4 as a gif
-       */
-      attributes.playsinline = true;
-      attributes.controls = true;
-
-      /**
-       * Change event to be listened
-       */
-      eventName = 'loadeddata';
-    }
 
     /**
      * Compose tag with defined attributes
      */
-    this.nodes.videoEl = make(tag, this.CSS.videoEl, attributes);
+    this.nodes.videoEl = make('VIDEO', this.CSS.videoEl, attributes) as HTMLVideoElement;
 
     /**
      * Add load event listener
      */
-    this.nodes.videoEl.addEventListener(eventName, () => {
+    this.nodes.videoEl.addEventListener('loadeddata', () => {
       this.toggleStatus(UiState.Filled);
     });
 
